@@ -21,7 +21,7 @@ jobs:
           key: ${{ secrets.EC2_KEY }}
           script: |
             export KUBECONFIG=/home/ubuntu/.kube/config
-            cd /home/ubuntu/digitalxc1
+            cd /home/ubuntu/digitalxc
             kubectl apply -f k8s/
             kubectl rollout restart deployment/hello-nginx
             kubectl rollout status deployment/hello-nginx
