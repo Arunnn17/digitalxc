@@ -1,0 +1,28 @@
+name: Deploy to k3s
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Deploy to k3s via SSH
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_KEY }}
+          script: |
+            export KUBECONFIG=/home/ubuntu/.kube/config
+            cd /home/ubuntu/digitalxc1
+            kubectl apply -f k8s/
+            kubectl rollout restart deployment/hello-nginx
+            kubectl rollout status deployment/hello-nginx
+
